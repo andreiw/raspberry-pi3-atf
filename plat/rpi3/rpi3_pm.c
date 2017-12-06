@@ -147,6 +147,7 @@ static int rpi3_pwr_domain_on(u_register_t mpidr)
 	uint64_t *hold_base = (uint64_t *)PLAT_RPI3_HOLD_BASE;
 
 	hold_base[pos] = PLAT_RPI3_HOLD_STATE_GO;
+	dsbsy();
 	sev();
 
 	return rc;

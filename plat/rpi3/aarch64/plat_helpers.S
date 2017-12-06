@@ -86,12 +86,16 @@ endfunc plat_is_my_cpu_primary
 func plat_secondary_cold_boot_setup
 	/* Calculate address of our hold entry */
 	bl	plat_my_core_pos
+	lsl	x0, x0, #3
+
 	mov_imm	x2, PLAT_RPI3_HOLD_BASE
 
 	/* Wait until we have a go */
+	mov 	x1, #0x1337
+	str	x1, [x2, x0]
 poll_mailbox:
 	ldr	x1, [x2, x0]
-	cbz	x1, 1f
+	cbnz	x1, 1f
 	mov_imm	x0, PLAT_RPI3_TRUSTED_MAILBOX_BASE
 	ldr	x1, [x0]
 	br	x1
@@ -139,9 +143,5 @@ func plat_reset_handler
 	mov	w1, #0x80000000
 	str	wzr, [x0, #RPI3_INTC_CONTROL_OFFSET]
 	str	w1, [x0, #RPI3_INTC_PRESCALER_OFFSET]
-
-	/* wire mailbox 3 to the FIQ line */
-	mov	w1, RPI3_INTC_MBOX_CONTROL_SLOT3_FIQ
-	str	w1, [x0, #RPI3_INTC_MBOX_CONTROL_OFFSET]
 	ret
 endfunc plat_reset_handler

@@ -129,6 +129,7 @@ This release also contains the following platform support:
 *   QEMU emulator
 *   RockChip RK3368 and RK3399 SoCs
 *   Xilinx Zynq UltraScale + MPSoC
+*   Raspberry Pi 3
 
 ### Still to Come
 
