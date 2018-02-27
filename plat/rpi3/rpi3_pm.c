@@ -195,13 +195,6 @@ void rpi3_pwr_domain_suspend_finish(const psci_power_state_t *target_state)
 /*******************************************************************************
  * Platform handlers to shutdown/reboot the system
  ******************************************************************************/
-static void __dead2 rpi3_system_off(void)
-{
-	ERROR("RPI3 System Off: operation not handled.\n");
-	for (;;)
-		wfi();
-}
-
 #define RESET_TIMEOUT 10
 
 static void __dead2 rpi3_system_reset(void)
@@ -222,6 +215,12 @@ static void __dead2 rpi3_system_reset(void)
 	INFO("RPI3 System Reset: invoking watchdog reset.\n");
 	for (;;)
 		wfi();
+}
+
+static void __dead2 rpi3_system_off(void)
+{
+	ERROR("RPI3 System Off: resetting instead\n");
+	rpi3_system_reset();
 }
 
 static const plat_psci_ops_t plat_rpi3_psci_pm_ops = {
