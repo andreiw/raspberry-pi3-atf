@@ -219,7 +219,6 @@ static void __dead2 rpi3_system_reset(void)
 
 static void __dead2 rpi3_system_off(void)
 {
-	ERROR("RPI3 System Off: resetting instead\n");
 	rpi3_system_reset();
 }
 
