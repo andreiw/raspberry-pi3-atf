@@ -210,16 +210,9 @@ void cm_prepare_el3_exit(uint32_t security_state)
 
 	if (security_state == NON_SECURE) {
 		scr_el3 = read_ctx_reg(get_el3state_ctx(ctx), CTX_SCR_EL3);
-		if (scr_el3 & SCR_HCE_BIT) {
-			/* Use SCTLR_EL1.EE value to initialise sctlr_el2 */
-			sctlr_elx = read_ctx_reg(get_sysregs_ctx(ctx),
-						 CTX_SCTLR_EL1);
-			sctlr_elx &= ~SCTLR_EE_BIT;
-			sctlr_elx |= SCTLR_EL2_RES1;
-			write_sctlr_el2(sctlr_elx);
-		} else if (read_id_aa64pfr0_el1() &
+		if (read_id_aa64pfr0_el1() &
 			   (ID_AA64PFR0_ELX_MASK << ID_AA64PFR0_EL2_SHIFT)) {
-			/* EL2 present but unused, need to disable safely */
+			/* EL2 present, but may be unused, initialize known sane state. */
 
 			/* HCR_EL2 = 0, except RW bit set to match SCR_EL3 */
 			write_hcr_el2((scr_el3 & SCR_RW_BIT) ? HCR_RW_BIT : 0);
@@ -248,6 +241,15 @@ void cm_prepare_el3_exit(uint32_t security_state)
 			 * translation are disabled.
 			 */
 			write_vttbr_el2(0);
+		}
+
+		if (scr_el3 & SCR_HCE_BIT) {
+			/* Use SCTLR_EL1.EE value to initialise sctlr_el2 */
+			sctlr_elx = read_ctx_reg(get_sysregs_ctx(ctx),
+						 CTX_SCTLR_EL1);
+			sctlr_elx &= ~SCTLR_EE_BIT;
+			sctlr_elx |= SCTLR_EL2_RES1;
+			write_sctlr_el2(sctlr_elx);
 		}
 	}
 
