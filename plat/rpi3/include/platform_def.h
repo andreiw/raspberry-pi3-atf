@@ -91,11 +91,11 @@
 #define NS_DRAM0_BASE			0x00400000
 #define NS_DRAM0_SIZE			0x00c00000
 
-#define SEC_SRAM_BASE			0x00190000
-#define SEC_SRAM_SIZE			0x00070000
+#define SEC_SRAM_BASE			0x00200000
+#define SEC_SRAM_SIZE			0x00050000
 
-#define SEC_DRAM_BASE			0x00200000
-#define SEC_DRAM_SIZE			0x00200000
+#define SEC_DRAM_BASE			0x00250000
+#define SEC_DRAM_SIZE			0x001b0000
 
 /*
  * ARM-TF lives in SRAM, partition it here
