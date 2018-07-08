@@ -219,6 +219,13 @@ static void __dead2 rpi3_system_reset(void)
 
 static void __dead2 rpi3_system_off(void)
 {
+	static const uintptr_t base = RPI3_WDOG_BASE_ADDRESS;
+	uint32_t rsts;
+
+	rsts = mmio_read_32(base + RPI3_WDOG_RSTS_OFFSET);
+	rsts |= RPI3_WDOG_PASSWORD | RPI3_WDOG_HALT_AFTER_RESET;
+	mmio_write_32(base + RPI3_WDOG_RSTS_OFFSET, rsts);
+
 	rpi3_system_reset();
 }
 
